@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # DeathAIAUS Application
+  deathaius:
+    build: .
+    container_name: deathaius-platform
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - MONGODB_URI=mongodb://mongodb:27017/deathaiaus
+      - JWT_SECRET=your_super_secret_jwt_key_here
+      - DOMAIN=www.deathaiaus.com.au
+      - FRONTEND_URL=https://www.deathaiaus.com.au
+      - LMSTUDIO_URL=http://host.docker.internal:6668
+      - OPENAI_API_KEY=your_openai_api_key_here
+      - DEFAULT_AI_PLATFORM=lmstudio
+    depends_on:
+      - mongodb
+      - redis
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - deathaius-network
+
+  # MongoDB Database
+  mongodb:
+    image: mongo:6.0
+    container_name: deathaius-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password123
+      - MONGO_INITDB_DATABASE=deathaius
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    restart: unless-stopped
+    networks:
+      - deathaius-network
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7-alpine
+    container_name: deathaius-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - deathaius-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: deathaius-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - deathaius
+    restart: unless-stopped
+    networks:
+      - deathaius-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  deathaius-network:
+    driver: bridge
