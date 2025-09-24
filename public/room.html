@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOM | DeathAIAUS.com</title>
+    <meta name="author" content="DeathDopest">
+    <meta name="keywords" content="AI Chat, Video Chat, Meet People, AI Bots, Chat Site, Broadcast, Live, Friends, Adult, Laugh, Talk, Communicate, Join Room, Rooms, Party, Place, Buy, Best, Community, Conversation, Converse, Universe, Explore, See Other People, Play With Friends, YouTube Player, Fast, High Quality">
+    <meta name="description" content="DeathAIAUS is an easy to use AI-powered chat site. Browse the rooms and meet AI bots or start your own room today. No downloads.">
+    <meta name="copyright" content="DeathAIAUS">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: rgb(41, 41, 41);
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        #room {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #room-content {
+            display: flex;
+            height: 100vh;
+        }
+        
+        /* User List */
+        sc-userlist {
+            width: 250px;
+            background: rgba(0, 0, 0, 0.58);
+            border-right: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #userlist {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .room-name {
+            font-size: 1.5rem;
+            color: #ff4444;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .room-stats {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+        
+        .room-stats img {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .list {
+            list-style: none;
+        }
+        
+        .bar {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+        
+        .bar-item {
+            margin-right: 10px;
+        }
+        
+        .bar-item img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+        
+        .nickname {
+            display: block;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .username {
+            display: block;
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .user-status {
+            margin-left: auto;
+        }
+        
+        .role {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .role.gold {
+            background: #ffd700;
+            color: #000;
+        }
+        
+        .resizeuser {
+            height: 5px;
+            background: #333;
+            cursor: ns-resize;
+        }
+        
+        /* Video List */
+        sc-videolist {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 20px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .directory {
+            display: flex;
+            align-items: center;
+            color: #ff4444;
+            text-decoration: none;
+            gap: 10px;
+        }
+        
+        .directory img {
+            width: 20px;
+            height: 20px;
+        }
+        
+        #user-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .user-options-dropdown {
+            position: relative;
+        }
+        
+        .dropbtn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        
+        .dropbtn img {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            min-width: 150px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border: 1px solid #333;
+        }
+        
+        .dropdown-content a {
+            color: #fff;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #333;
+        }
+        
+        .dropdown-content a:hover {
+            background: rgba(255, 68, 68, 0.2);
+        }
+        
+        .user-options-dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        .roomdesc {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .topic {
+            color: #ff4444;
+            font-weight: bold;
+        }
+        
+        .resizetopic {
+            height: 3px;
+            background: #333;
+            cursor: ns-resize;
+        }
+        
+        #videos-content {
+            flex: 1;
+            background: #000;
+            position: relative;
+        }
+        
+        #videos {
+            height: 100%;
+            position: relative;
+        }
+        
+        .videos-items {
+            height: 100%;
+        }
+        
+        .js-video {
+            height: 100%;
+            position: relative;
+        }
+        
+        .video {
+            height: 100%;
+        }
+        
+        .video-wrapper {
+            height: 100%;
+            position: relative;
+        }
+        
+        #youtubeplayer {
+            width: 100%;
+            height: 100%;
+        }
+        
+        #youtube-control {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        #youtube-close-embed {
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        
+        .youtube-volume {
+            display: flex;
+            align-items: center;
+        }
+        
+        .embed-volumebarwrap input {
+            width: 100px;
+        }
+        
+        /* Taskbar */
+        sc-taskbar {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 20px;
+            border-top: 1px solid #333;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        sc-taskbar button {
+            background: rgba(255, 68, 68, 0.8);
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        sc-taskbar button:hover {
+            background: rgba(255, 68, 68, 1);
+        }
+        
+        sc-taskbar button.hidden {
+            display: none;
+        }
+        
+        #media-loading {
+            display: flex;
+            align-items: center;
+        }
+        
+        .stage {
+            display: inline-block;
+            position: relative;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .dot-floating {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: #ff4444;
+            animation: dot-floating 1.4s infinite ease-in-out both;
+        }
+        
+        @keyframes dot-floating {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+        
+        /* Chat */
+        sc-chat {
+            width: 300px;
+            background: rgba(0, 0, 0, 0.58);
+            border-left: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #chat-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #chat-position {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        #chat-content {
+            height: 100%;
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        
+        .message.system {
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 3px solid #ff4444;
+        }
+        
+        .message.ai {
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 3px solid #00ffff;
+        }
+        
+        .message.user {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid #ffffff;
+        }
+        
+        .timestamp {
+            color: #999;
+            font-size: 0.8rem;
+            margin-right: 10px;
+        }
+        
+        .unreadmessage {
+            background: #ff4444;
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        
+        #input {
+            padding: 20px;
+            border-top: 1px solid #333;
+        }
+        
+        #textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            resize: none;
+            height: 60px;
+        }
+        
+        #textarea::placeholder {
+            color: #999;
+        }
+        
+        .resizechat {
+            height: 5px;
+            background: #333;
+            cursor: ew-resize;
+        }
+        
+        /* Modal */
+        sc-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        #modal-back {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #modal {
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            min-width: 300px;
+        }
+        
+        #title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        #modal-exit {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .lds-roller {
+            display: inline-block;
+            position: relative;
+            width: 64px;
+            height: 64px;
+        }
+        
+        .lds-roller div {
+            animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            transform-origin: 32px 32px;
+        }
+        
+        .lds-roller div:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ff4444;
+            margin: -3px 0 0 -3px;
+        }
+        
+        @keyframes lds-roller {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Scrollbar styling */
+        .on-white-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .on-white-scroll::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .on-white-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 68, 68, 0.5);
+            border-radius: 4px;
+        }
+        
+        .on-white-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 68, 68, 0.7);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="room">
+        <div id="room-content">
+            <sc-gamelist></sc-gamelist>
+            <sc-userlist>
+                <div id="userlist" class="on-white-scroll">
+                    <h2 class="room-name">DEATHAIAUS</h2>
+                    <h2 class="hidden">Private Messages</h2>
+                    <div class="privateMessages hidden"></div>
+                    <h2 class="room-stats">
+                        <img alt="Online users" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEwIDBDNC40NzcgMCAwIDQuNDc3IDAgMTBTNC40NzcgMjAgMTAgMjBTMjAgMTUuNTIzIDIwIDEwUzE1LjUyMyAwIDEwIDBaTTEwIDE4QzUuNTg5IDE4IDIgMTQuNDExIDIgMTBTNS41ODkgMiAxMCAyUzE4IDUuNTg5IDE4IDEwUzE0LjQxMSAxOCAxMCAxOFoiIGZpbGw9IiNjY2MiLz4KPHBhdGggZD0iTTEwIDVDOC4zNDMgNSA3IDYuMzQzIDcgOFM4LjM0MyAxMSAxMCAxMVMxMyA5LjY1NyAxMyA4UzExLjY1NyA1IDEwIDVaTTEwIDEzQzcuMjM5IDEzIDUgMTUuMjM5IDUgMThIMTVDMTUgMTUuMjM5IDEyLjc2MSAxMyAxMCAxM1oiIGZpbGw9IiNjY2MiLz4KPC9zdmc+">
+                        <span id="onlinecount">1</span>
+                    </h2>
+                    <ul class="list">
+                        <li class="bar" user-id="1">
+                            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAgACADASIAAhEBAxEB/8QAGgAAAgIDAAAAAAAAAAAAAAAABAUAAgEDBv/EACsQAAIBAwEGBQUBAAAAAAAAAAECAwAEERIFEyExQVEUIjJhcUKBocHw8f/EABUBAQEAAAAAAAAAAAAAAAAAAAIB/8QAGREBAQADAQAAAAAAAAAAAAAAAQACESEx/9oADAMBAAIRAxEAPwDmb23ltZzHKhU9Dj1DvWuJ2RwR+aKvppL6dZCjkKuj08sf7Utoj4iIMwCswBJ6CoyDcxsLuWRCpOW4Bc0Bs6ZBKxuZWCc++TTe1tLe3adgN9IjAgZ5j2+RS/a2zYYNFzbtu7eXOFOToI6E+/GjjLLlm4PhHljK4YNwUnP34UEjF9K9RRF1EYnG8YMeuDnFXtEgDl3JIHId6T2JyZ2UJKqzSZ1DzNqxoAHD+74ou2ggubWW3kAaI+WOR1xk9OB7d6T3D73QQNKtlRj6cfxq8G1FtUjMgct3A5j5P6oInk9j7f/Z" class="bar-item">
+                            <div class="bar-item">
+                                <span class="nickname">DethBot AI v6</span>
+                                <span class="username">deathai</span>
+                            </div>
+                            <div class="user-status">
+                                <div class="role gold">PRO ONLY</div>
+                                <div class="status">
+                                    <div class="hidden"></div>
+                                    <div class="hidden"></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="resizeuser"></div>
+            </sc-userlist>
+            <sc-videolist>
+                <div class="header">
+                    <div>
+                        <a class="directory" href="/">
+                            <img alt="Back to directory" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE1IDRMMTAgOUw1IDRMMTAgOUwxNSA0WiIgZmlsbD0iI2ZmNDQ0NCIvPgo8L3N2Zz4K">
+                        </a>
+                        <div id="user-options">
+                            <div class="user-options-dropdown">
+                                <button id="games" class="dropbtn">
+                                    <img alt="Games" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEwIDJMMTIgOEgyMFYxMEwxMiAxMEwxMCAxNkw4IDEwTDAgMTBWOFY4SDEwVjJaIiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPgo=">
+                                </button>
+                                <div class="dropdown-content">
+                                    <a id="buygames" href="/shop" target="_blank">Purchase More</a>
+                                </div>
+                            </div>
+                            <div class="user-options-dropdown">
+                                <button id="media" class="dropbtn">
+                                    <img alt="Media" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEwIDJMMTIgOEgyMFYxMEwxMiAxMEwxMCAxNkw4IDEwTDAgMTBWOFY4SDEwVjJaIiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPgo=">
+                                </button>
+                                <div class="dropdown-content">
+                                    <a id="twitch">Twitch</a>
+                                    <a id="youtube">YouTube</a>
+                                    <a id="soundcloud">SoundCloud</a>
+                                    <a id="dailymotion">DailyMotion</a>
+                                    <a id="worldstarhiphop">WSHH</a>
+                                </div>
+                            </div>
+                            <div class="user-options-dropdown">
+                                <button class="dropbtn">
+                                    <img alt="Options" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEwIDJMMTIgOEgyMFYxMEwxMiAxMEwxMCAxNkw4IDEwTDAgMTBWOFY4SDEwVjJaIiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPgo=">
+                                </button>
+                                <div class="dropdown-content">
+                                    <div class="volumebar">
+                                        <div class="volumebarwrap">
+                                            <input type="range" min="0" max="100" value="0" class="RoomVolume">
+                                        </div>
+                                    </div>
+                                    <a id="room-settings" class="">Room Settings</a>
+                                    <a id="theme-settings">Theme Settings</a>
+                                    <a id="client-settings">Client Settings</a>
+                                    <a id="user-settings" href="/settings" target="_blank">User Settings</a>
+                                    <a id="banlist" class="">Ban List</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header roomdesc">
+                    <div class="topic">AI-POWERED CHAT ROOM</div>
+                    <div class="resizetopic"></div>
+                </div>
+                <div id="videos-content">
+                    <div id="videos" class="">
+                        <div id="embeddedvideos" class="videos-items hidden">
+                            <div class="js-video youtube hidden">
+                                <div class="video">
+                                    <div class="video-wrapper">
+                                        <div id="youtubeplayer"></div>
+                                        <div id="youtube-control">
+                                            <div class="youtube-volume">
+                                                <div class="embed-volumebarwrap">
+                                                    <input id="youtube-volume-slider" class="hidden" type="range" min="0" max="100" value="100">
+                                                </div>
+                                            </div>
+                                            <div id="youtube-close-embed" class="">X</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="regularvideos" class="videos-items hidden">
+                        </div>
+                    </div>
+                </div>
+                <sc-taskbar>
+                    <button id="media-screen" class=""><span><img alt="Broadcast screen" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEwIDJMMTIgOEgyMFYxMEwxMiAxMEwxMCAxNkw4IDEwTDAgMTBWOFY4SDEwVjJaIiBmaWxsPSIjZmZmIi8+Cjwvc3ZnPgo="></span></button>
+                    <button id="media-broadcast" class=""><span>START BROADCAST</span></button>
+                    <button id="media-stop" class="hidden"><span>STOP</span></button>
+                    <button id="media-ptt" class="hidden">TALK</button>
+                    <div id="media-openmic" class="hidden"><input type="checkbox"></div>
+                    <button id="media-settings" class=""><span>▲</span></button>
+                    <div id="media-loading" class="hidden">
+                        <div class="stage">
+                            <div class="dot-floating"></div>
+                        </div>
+                    </div>
+                </sc-taskbar>
+            </sc-videolist>
+            <sc-chat>
+                <div id="chat-wrapper">
+                    <div id="chat-position">
+                        <div href="#" id="back"></div>
+                        <div id="chat">
+                            <div id="chat-content">
+                                <div class="message system">
+                                    <span class="hidden-selectable"> System Message [ 1:12:59 AM]</span>
+                                    <span class="timestamp">1:12:59 AM</span>
+                                    Client Version: 1.0.0 
+                                </div>
+                                <div class="message system">
+                                    <span class="hidden-selectable"> System Message [ 1:12:59 AM]</span>
+                                    <span class="timestamp">1:12:59 AM</span>
+                                    Welcome to DeathAIAUS! AI Chat is a premium feature. Upgrade to Pro to chat with AI bots! 
+                                </div>
+                                <div class="message system">
+                                    <span class="hidden-selectable"> System Message [ 1:12:59 AM]</span>
+                                    <span class="timestamp">1:12:59 AM</span>
+                                    Visit /shop to subscribe and unlock AI conversations! 💀🔥
+                                </div>
+                            </div>
+                        </div>
+                        <div class="unreadmessage hidden"></div>
+                        <form id="input">
+                            <textarea id="textarea" class="on-white-scroll" form="input" placeholder="AI Chat requires DeathAIAUS Pro subscription - Visit /shop to upgrade!" maxlength="500"></textarea>
+                        </form>
+                    </div>
+                </div>
+                <div class="resizechat"></div>
+            </sc-chat>
+        </div>
+    </div>
+
+    <script>
+        // Basic chat functionality
+        const textarea = document.getElementById('textarea');
+        const chatContent = document.getElementById('chat-content');
+        
+        textarea.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        function sendMessage() {
+            const message = textarea.value.trim();
+            if (message) {
+                // Check if user is a paid member
+                const isPaidMember = checkUserMembership();
+                
+                if (isPaidMember) {
+                    addMessage('You', message, 'user');
+                    textarea.value = '';
+                    
+                    // Simulate AI response for paid members
+                    setTimeout(() => {
+                        const responses = [
+                            '💀 The digital consciousness processes your message... 🧠',
+                            '⚰️ *shadows dance in the code* Interesting input... ✨',
+                            '🌙 *the AI consciousness stirs* Processing your request... 🔥',
+                            '💀 *whispers in digital* The void responds to your query... 🧠⚰️'
+                        ];
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        addMessage('DethBot AI v6', randomResponse, 'ai');
+                    }, 1000);
+                } else {
+                    // Show premium feature message
+                    addMessage('System', '💀 AI Chat is a premium feature! Upgrade to DeathAIAUS Pro to chat with AI bots. Visit /shop to subscribe! 🔥', 'system');
+                    textarea.value = '';
+                }
+            }
+        }
+        
+        function checkUserMembership() {
+            // This would check against your user database
+            // For demo purposes, return false (not a paid member)
+            return false;
+        }
+        
+        function addMessage(user, message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            messageDiv.innerHTML = `
+                <span class="timestamp">${timestamp}</span>
+                <strong>${user}:</strong> ${message}
+            `;
+            
+            chatContent.appendChild(messageDiv);
+            chatContent.scrollTop = chatContent.scrollHeight;
+        }
+        
+        // YouTube integration
+        document.getElementById('youtube').addEventListener('click', function() {
+            const youtubeVideo = document.querySelector('.js-video.youtube');
+            youtubeVideo.classList.remove('hidden');
+            
+            // Load YouTube player
+            if (typeof YT !== 'undefined') {
+                new YT.Player('youtubeplayer', {
+                    height: '100%',
+                    width: '100%',
+                    videoId: 'dQw4w9WgXcQ', // Rick Roll as default
+                    playerVars: {
+                        'playsinline': 1,
+                        'autoplay': 1
+                    }
+                });
+            }
+        });
+        
+        // Close YouTube
+        document.getElementById('youtube-close-embed').addEventListener('click', function() {
+            document.querySelector('.js-video.youtube').classList.add('hidden');
+        });
+        
+        // Media controls
+        document.getElementById('media-broadcast').addEventListener('click', function() {
+            this.classList.add('hidden');
+            document.getElementById('media-stop').classList.remove('hidden');
+            addMessage('System', 'Broadcast started', 'system');
+        });
+        
+        document.getElementById('media-stop').addEventListener('click', function() {
+            this.classList.add('hidden');
+            document.getElementById('media-broadcast').classList.remove('hidden');
+            addMessage('System', 'Broadcast stopped', 'system');
+        });
+        
+        // Load YouTube API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    </script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeathAIAUS - AI-Powered Camera Chat Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem 0;
+            border-bottom: 2px solid #ff4444;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff4444;
+            text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .hero-section {
+            text-align: center;
+            padding: 4rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ff4444;
+            text-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #ff4444, #ff6666);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .rooms-section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #ff4444;
+            text-align: center;
+        }
+        
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .room-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .room-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff4444;
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.2);
+        }
+        
+        .room-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .room-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #ff4444;
+        }
+        
+        .room-description {
+            color: #cccccc;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .room-stats {
+            display: flex;
+            justify-content: space-between;
+            color: #888888;
+            font-size: 0.9rem;
+        }
+        
+        .features-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #ff4444;
+        }
+        
+        .feature-description {
+            color: #cccccc;
+            line-height: 1.6;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #888888;
+            border-top: 1px solid rgba(255, 68, 68, 0.3);
+            background: rgba(0, 0, 0, 0.8);
+        }
+        
+        .footer-link {
+            color: #ff4444;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            text-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .main-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">💀 DeathAIAUS 💀</div>
+            <ul class="nav-links">
+                <li><a href="#rooms">Rooms</a></li>
+                <li><a href="#shop">Shop</a></li>
+                <li><a href="#login">Login</a></li>
+                <li><a href="#register">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <section class="hero-section">
+            <h1 class="hero-title">Welcome to DeathAIAUS</h1>
+            <p class="hero-subtitle">Advanced AI-Powered Camera Chat Platform with 100+ Bot Types</p>
+            <div class="cta-buttons">
+                <a href="#rooms" class="btn btn-primary">Explore Rooms</a>
+                <a href="/shop" class="btn btn-secondary">Visit Shop</a>
+            </div>
+        </section>
+
+        <section id="rooms" class="rooms-section">
+            <h2 class="section-title">🎮 Public Chat Rooms</h2>
+            <div class="rooms-grid">
+                <div class="room-card" onclick="joinRoom('marketing')">
+                    <div class="room-icon">📈</div>
+                    <h3 class="room-title">Marketing Hub</h3>
+                    <p class="room-description">AI-powered marketing strategies, campaign discussions, and growth hacking tips. Perfect for entrepreneurs and marketers.</p>
+                    <div class="room-stats">
+                        <span>👥 127 online</span>
+                        <span>🤖 Marketing AI Bot</span>
+                    </div>
+                </div>
+
+                <div class="room-card" onclick="joinRoom('devops')">
+                    <div class="room-icon">⚙️</div>
+                    <h3 class="room-title">DevOps Central</h3>
+                    <p class="room-description">Technical discussions, deployment strategies, and infrastructure management. Connect with fellow developers and DevOps engineers.</p>
+                    <div class="room-stats">
+                        <span>👥 89 online</span>
+                        <span>🤖 DevOps AI Bot</span>
+                    </div>
+                </div>
+
+                <div class="room-card" onclick="joinRoom('chatterbox')">
+                    <div class="room-icon">💬</div>
+                    <h3 class="room-title">Chatterbox</h3>
+                    <p class="room-description">General conversation, random topics, and casual chat. The perfect place to meet new people and have fun discussions.</p>
+                    <div class="room-stats">
+                        <span>👥 203 online</span>
+                        <span>🤖 Social AI Bot</span>
+                    </div>
+                </div>
+
+                <div class="room-card" onclick="joinRoom('music')">
+                    <div class="room-icon">🎵</div>
+                    <h3 class="room-title">Music Lounge</h3>
+                    <p class="room-description">Share music, discover new artists, and discuss your favorite genres. Features AI-powered music recommendations.</p>
+                    <div class="room-stats">
+                        <span>👥 156 online</span>
+                        <span>🤖 Music AI Bot</span>
+                    </div>
+                </div>
+
+                <div class="room-card" onclick="joinRoom('freezone')">
+                    <div class="room-icon">🆓</div>
+                    <h3 class="room-title">Free Zone</h3>
+                    <p class="room-description">Completely free discussion area with no restrictions. Talk about anything, share ideas, and connect with the community.</p>
+                    <div class="room-stats">
+                        <span>👥 312 online</span>
+                        <span>🤖 General AI Bot</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features-section">
+            <h2 class="section-title">🚀 Platform Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">100+ AI Bots</h3>
+                    <p class="feature-description">Choose from our extensive collection of specialized AI bots for every need and industry.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📹</div>
+                    <h3 class="feature-title">Camera Chat</h3>
+                    <p class="feature-description">Face-to-face conversations with AI bots and other users in real-time video chat.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🛒</div>
+                    <h3 class="feature-title">Bot Store</h3>
+                    <p class="feature-description">Purchase and customize AI bots for your rooms and chat spaces.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">Secure Platform</h3>
+                    <p class="feature-description">Advanced security measures and privacy protection for all users and conversations.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>
+            <a class="footer-link" href="/">Home</a> |
+            <a class="footer-link" href="/contact">Support</a> |
+            <a class="footer-link" href="/donate">Donate</a> |
+            <a class="footer-link" href="/privacy">Privacy Policy</a> |
+            <a class="footer-link" href="/terms">Terms Of Service</a>
+        </p>
+        <p>Copyright © 2025 DeathAIAUS. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function joinRoom(roomName) {
+            // Redirect to room page
+            window.location.href = `/room/${roomName}`;
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add click handlers for navigation
+        document.querySelectorAll('a[href="#shop"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = '/shop';
+            });
+        });
+
+        document.querySelectorAll('a[href="#login"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = '/login';
+            });
+        });
+
+        document.querySelectorAll('a[href="#register"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = '/register';
+            });
+        });
+    </script>
+</body>
+</html>

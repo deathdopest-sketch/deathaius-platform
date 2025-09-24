@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHOP | DeathAIAUS.com</title>
+    <meta name="author" content="DeathDopest">
+    <meta name="keywords" content="AI Bots, Chat Bots, Room Bots, AI Assistant, Bot Store, DeathAIAUS, AI Chat Platform, Custom Bots, Bot Marketplace, AI Services">
+    <meta name="copyright" content="DeathAIAUS">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem 0;
+            border-bottom: 2px solid #ff4444;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff4444;
+            text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .shop-header {
+            text-align: center;
+            padding: 3rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+        
+        .shop-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ff4444;
+            text-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+        }
+        
+        .shop-subtitle {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 2rem;
+        }
+        
+        .revenue-banner {
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            color: #000000;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .category-filters {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+        
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #ff4444;
+            border-color: #ff4444;
+        }
+        
+        .bots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .bot-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .bot-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff4444;
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.2);
+        }
+        
+        .bot-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .bot-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #ff4444;
+        }
+        
+        .bot-description {
+            color: #cccccc;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .bot-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .bot-features li {
+            color: #888888;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .bot-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #00ff00;
+            font-weight: bold;
+        }
+        
+        .bot-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ff00;
+            margin-bottom: 1rem;
+        }
+        
+        .bot-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #ff4444, #ff6666);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ff4444;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .stats-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff4444;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #cccccc;
+        }
+        
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 68, 68, 0.3);
+            margin-top: 3rem;
+        }
+        
+        .footer-link {
+            color: #ff4444;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            text-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .category-filters {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .shop-title {
+                font-size: 2rem;
+            }
+            
+            .main-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">💀 DeathAIAUS 💀</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="#rooms">Rooms</a></li>
+                <li><a href="/shop" class="active">Shop</a></li>
+                <li><a href="#login">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-container">
+        <section class="shop-header">
+            <h1 class="shop-title">🤖 Bot Store</h1>
+            <p class="shop-subtitle">Purchase AI Bots for Your Chat Rooms</p>
+            <div class="revenue-banner">
+                💰 Revenue Potential: $15,500/month conservative estimate
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <h2>📊 Store Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Bot Types Available</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Categories</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">$15.5K</div>
+                    <div class="stat-label">Monthly Revenue Potential</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">AI Support</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-filters">
+            <button class="filter-btn active" onclick="filterBots('all')">All Bots</button>
+            <button class="filter-btn" onclick="filterBots('ai')">AI & Intelligence</button>
+            <button class="filter-btn" onclick="filterBots('trading')">Trading & Financial</button>
+            <button class="filter-btn" onclick="filterBots('web')">Web & Data</button>
+            <button class="filter-btn" onclick="filterBots('gaming')">Gaming & Entertainment</button>
+            <button class="filter-btn" onclick="filterBots('security')">Security & Monitoring</button>
+            <button class="filter-btn" onclick="filterBots('business')">Business & Productivity</button>
+        </section>
+
+        <section class="bots-grid" id="botsGrid">
+            <!-- AI & Intelligence Bots -->
+            <div class="bot-card" data-category="ai">
+                <div class="popular-badge">Popular</div>
+                <div class="bot-icon">🧠</div>
+                <h3 class="bot-title">Demon AI Advanced</h3>
+                <p class="bot-description">Advanced AI assistant with deep reasoning capabilities and autonomous decision making.</p>
+                <ul class="bot-features">
+                    <li>Advanced reasoning and problem solving</li>
+                    <li>Autonomous decision making</li>
+                    <li>Deep learning capabilities</li>
+                    <li>24/7 availability</li>
+                </ul>
+                <div class="bot-price">$99/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('demon-ai-advanced')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('demon-ai-advanced')">Preview</button>
+                </div>
+            </div>
+
+            <div class="bot-card" data-category="ai">
+                <div class="bot-icon">🤖</div>
+                <h3 class="bot-title">Ultimate AI Coordinator</h3>
+                <p class="bot-description">Orchestrates multiple AI agents and systems for complex task management.</p>
+                <ul class="bot-features">
+                    <li>Multi-agent coordination</li>
+                    <li>Complex task management</li>
+                    <li>System integration</li>
+                    <li>Real-time monitoring</li>
+                </ul>
+                <div class="bot-price">$149/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('ultimate-ai-coordinator')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('ultimate-ai-coordinator')">Preview</button>
+                </div>
+            </div>
+
+            <!-- Trading & Financial Bots -->
+            <div class="bot-card" data-category="trading">
+                <div class="popular-badge">Hot</div>
+                <div class="bot-icon">💰</div>
+                <h3 class="bot-title">Crypto Trading Bot</h3>
+                <p class="bot-description">Automated cryptocurrency trading with advanced market analysis and risk management.</p>
+                <ul class="bot-features">
+                    <li>Automated trading strategies</li>
+                    <li>Real-time market analysis</li>
+                    <li>Risk management</li>
+                    <li>Portfolio optimization</li>
+                </ul>
+                <div class="bot-price">$199/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('crypto-trading-bot')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('crypto-trading-bot')">Preview</button>
+                </div>
+            </div>
+
+            <div class="bot-card" data-category="trading">
+                <div class="bot-icon">📈</div>
+                <h3 class="bot-title">Portfolio Manager</h3>
+                <p class="bot-description">Intelligent portfolio management with automated rebalancing and performance tracking.</p>
+                <ul class="bot-features">
+                    <li>Automated rebalancing</li>
+                    <li>Performance tracking</li>
+                    <li>Risk assessment</li>
+                    <li>Diversification strategies</li>
+                </ul>
+                <div class="bot-price">$129/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('portfolio-manager')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('portfolio-manager')">Preview</button>
+                </div>
+            </div>
+
+            <!-- Web & Data Bots -->
+            <div class="bot-card" data-category="web">
+                <div class="bot-icon">🌐</div>
+                <h3 class="bot-title">Intelligent Web Scraper</h3>
+                <p class="bot-description">Advanced web scraping with intelligent data extraction and processing capabilities.</p>
+                <ul class="bot-features">
+                    <li>Intelligent data extraction</li>
+                    <li>Anti-detection measures</li>
+                    <li>Data processing</li>
+                    <li>Multiple format support</li>
+                </ul>
+                <div class="bot-price">$79/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('intelligent-web-scraper')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('intelligent-web-scraper')">Preview</button>
+                </div>
+            </div>
+
+            <div class="bot-card" data-category="web">
+                <div class="bot-icon">📊</div>
+                <h3 class="bot-title">Data Analyzer</h3>
+                <p class="bot-description">Comprehensive data analysis with visualization and insights generation.</p>
+                <ul class="bot-features">
+                    <li>Statistical analysis</li>
+                    <li>Data visualization</li>
+                    <li>Insights generation</li>
+                    <li>Report creation</li>
+                </ul>
+                <div class="bot-price">$89/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('data-analyzer')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('data-analyzer')">Preview</button>
+                </div>
+            </div>
+
+            <!-- Gaming & Entertainment Bots -->
+            <div class="bot-card" data-category="gaming">
+                <div class="bot-icon">🎮</div>
+                <h3 class="bot-title">Game Bot Advanced</h3>
+                <p class="bot-description">Advanced gaming bot with strategy optimization and real-time decision making.</p>
+                <ul class="bot-features">
+                    <li>Strategy optimization</li>
+                    <li>Real-time decisions</li>
+                    <li>Multi-game support</li>
+                    <li>Performance tracking</li>
+                </ul>
+                <div class="bot-price">$59/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('game-bot-advanced')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('game-bot-advanced')">Preview</button>
+                </div>
+            </div>
+
+            <div class="bot-card" data-category="gaming">
+                <div class="bot-icon">🎵</div>
+                <h3 class="bot-title">Music Bot</h3>
+                <p class="bot-description">AI-powered music management with playlist creation and recommendation engine.</p>
+                <ul class="bot-features">
+                    <li>Playlist creation</li>
+                    <li>Music recommendations</li>
+                    <li>Genre analysis</li>
+                    <li>Social sharing</li>
+                </ul>
+                <div class="bot-price">$39/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('music-bot')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('music-bot')">Preview</button>
+                </div>
+            </div>
+
+            <!-- Security & Monitoring Bots -->
+            <div class="bot-card" data-category="security">
+                <div class="bot-icon">🛡️</div>
+                <h3 class="bot-title">Security Monitor</h3>
+                <p class="bot-description">Comprehensive security monitoring with threat detection and automated response.</p>
+                <ul class="bot-features">
+                    <li>Threat detection</li>
+                    <li>Automated response</li>
+                    <li>Real-time monitoring</li>
+                    <li>Incident reporting</li>
+                </ul>
+                <div class="bot-price">$119/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('security-monitor')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('security-monitor')">Preview</button>
+                </div>
+            </div>
+
+            <div class="bot-card" data-category="security">
+                <div class="bot-icon">📊</div>
+                <h3 class="bot-title">System Monitor</h3>
+                <p class="bot-description">Advanced system monitoring with performance optimization and alerting.</p>
+                <ul class="bot-features">
+                    <li>Performance monitoring</li>
+                    <li>Resource optimization</li>
+                    <li>Automated alerting</li>
+                    <li>Health checks</li>
+                </ul>
+                <div class="bot-price">$69/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('system-monitor')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('system-monitor')">Preview</button>
+                </div>
+            </div>
+
+            <!-- Business & Productivity Bots -->
+            <div class="bot-card" data-category="business">
+                <div class="bot-icon">💼</div>
+                <h3 class="bot-title">CRM Bot</h3>
+                <p class="bot-description">Customer relationship management with automated follow-ups and lead scoring.</p>
+                <ul class="bot-features">
+                    <li>Automated follow-ups</li>
+                    <li>Lead scoring</li>
+                    <li>Customer insights</li>
+                    <li>Sales tracking</li>
+                </ul>
+                <div class="bot-price">$99/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('crm-bot')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('crm-bot')">Preview</button>
+                </div>
+            </div>
+
+            <div class="bot-card" data-category="business">
+                <div class="bot-icon">📅</div>
+                <h3 class="bot-title">Task Manager Bot</h3>
+                <p class="bot-description">Intelligent task management with automated scheduling and priority optimization.</p>
+                <ul class="bot-features">
+                    <li>Automated scheduling</li>
+                    <li>Priority optimization</li>
+                    <li>Team collaboration</li>
+                    <li>Progress tracking</li>
+                </ul>
+                <div class="bot-price">$79/month</div>
+                <div class="bot-actions">
+                    <button class="btn btn-primary" onclick="purchaseBot('task-manager-bot')">Purchase</button>
+                    <button class="btn btn-secondary" onclick="previewBot('task-manager-bot')">Preview</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function filterBots(category) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const botCards = document.querySelectorAll('.bot-card');
+            botCards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function purchaseBot(botId) {
+            // Redirect to purchase page or show purchase modal
+            alert(`Redirecting to purchase page for ${botId}...`);
+            // In a real implementation, this would redirect to a payment processor
+        }
+
+        function previewBot(botId) {
+            // Show bot preview or demo
+            alert(`Showing preview for ${botId}...`);
+            // In a real implementation, this would show a demo or preview
+        }
+
+        // Add click handlers for navigation
+        document.querySelector('a[href="#rooms"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/';
+        });
+
+        document.querySelector('a[href="#login"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = '/login';
+        });
+    </script>
+
+    <footer class="footer">
+        <p>
+            <a class="footer-link" href="/">Home</a> |
+            <a class="footer-link" href="/contact">Support</a> |
+            <a class="footer-link" href="/donate">Donate</a> |
+            <a class="footer-link" href="/privacy">Privacy Policy</a> |
+            <a class="footer-link" href="/terms">Terms Of Service</a>
+        </p>
+        <p>Copyright © 2025 DeathAIAUS. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
