@@ -372,30 +372,66 @@
         }
         
         .message {
-            margin-bottom: 10px;
-            padding: 8px;
-            border-radius: 5px;
+            margin-bottom: 15px;
+            padding: 8px 0;
         }
         
         .message.system {
             background: rgba(255, 68, 68, 0.1);
             border-left: 3px solid #ff4444;
+            padding: 8px;
+            border-radius: 5px;
         }
         
         .message.ai {
             background: rgba(0, 255, 255, 0.1);
             border-left: 3px solid #00ffff;
+            padding: 8px;
+            border-radius: 5px;
         }
         
         .message.user {
             background: rgba(255, 255, 255, 0.05);
             border-left: 3px solid #ffffff;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        
+        .message.user-message {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+        
+        .message-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid #ff4444;
+        }
+        
+        .username {
+            font-weight: bold;
+            color: #ff4444;
+            margin-right: 10px;
         }
         
         .timestamp {
             color: #999;
             font-size: 0.8rem;
-            margin-right: 10px;
+        }
+        
+        .message-content {
+            margin-left: 42px;
+            color: #fff;
+            line-height: 1.4;
         }
         
         .unreadmessage {
@@ -660,19 +696,49 @@
                         <div id="chat">
                             <div id="chat-content">
                                 <div class="message system">
-                                    <span class="hidden-selectable"> System Message [ 1:12:59 AM]</span>
                                     <span class="timestamp">1:12:59 AM</span>
                                     Client Version: 1.0.0 
                                 </div>
                                 <div class="message system">
-                                    <span class="hidden-selectable"> System Message [ 1:12:59 AM]</span>
                                     <span class="timestamp">1:12:59 AM</span>
                                     Welcome to DeathAIAUS! AI Chat is a premium feature. Upgrade to Pro to chat with AI bots! 
                                 </div>
                                 <div class="message system">
-                                    <span class="hidden-selectable"> System Message [ 1:12:59 AM]</span>
                                     <span class="timestamp">1:12:59 AM</span>
                                     Visit /shop to subscribe and unlock AI conversations! 💀🔥
+                                </div>
+                                <div class="message user-message">
+                                    <div class="message-header">
+                                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAgACADASIAAhEBAxEB/8QAGgAAAgIDAAAAAAAAAAAAAAAABAUAAgEDBv/EACsQAAIBAwEGBQUBAAAAAAAAAAECAwAEERIFEyExQVEUIjJhcUKBocHw8f/EABUBAQEAAAAAAAAAAAAAAAAAAAIB/8QAGREBAQADAQAAAAAAAAAAAAAAAQACESEx/9oADAMBAAIRAxEAPwDmb23ltZzHKhU9Dj1DvWuJ2RwR+aKvppL6dZCjkKuj08sf7Utoj4iIMwCswBJ6CoyDcxsLuWRCpOW4Bc0Bs6ZBKxuZWCc++TTe1tLe3adgN9IjAgZ5j2+RS/a2zYYNFzbtu7eXOFOToI6E+/GjjLLlm4PhHljK4YNwUnP34UEjF9K9RRF1EYnG8YMeuDnFXtEgDl3JIHId6T2JyZ2UJKqzSZ1DzNqxoAHD+74ou2ggubWW3kAaI+WOR1xk9OB7d6T3D73QQNKtlRj6cfxq8G1FtUjMgct3A5j5P6oInk9j7f/Z" class="user-avatar">
+                                        <span class="username">Death</span>
+                                        <span class="timestamp">23/04/2025 16:58</span>
+                                    </div>
+                                    <div class="message-content">
+                                        I'm just not a chatter anymore<br>
+                                        I'm sorry I didn't record loops of me for you<br>
+                                        You can put me with lb<br>
+                                        Forever there
+                                    </div>
+                                </div>
+                                <div class="message user-message">
+                                    <div class="message-header">
+                                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAgACADASIAAhEBAxEB/8QAGgAAAgIDAAAAAAAAAAAAAAAABAUAAgEDBv/EACsQAAIBAwEGBQUBAAAAAAAAAAECAwAEERIFEyExQVEUIjJhcUKBocHw8f/EABUBAQEAAAAAAAAAAAAAAAAAAAIB/8QAGREBAQADAQAAAAAAAAAAAAAAAQACESEx/9oADAMBAAIRAxEAPwDmb23ltZzHKhU9Dj1DvWuJ2RwR+aKvppL6dZCjkKuj08sf7Utoj4iIMwCswBJ6CoyDcxsLuWRCpOW4Bc0Bs6ZBKxuZWCc++TTe1tLe3adgN9IjAgZ5j2+RS/a2zYYNFzbtu7eXOFOToI6E+/GjjLLlm4PhHljK4YNwUnP34UEjF9K9RRF1EYnG8YMeuDnFXtEgDl3JIHId6T2JyZ2UJKqzSZ1DzNqxoAHD+74ou2ggubWW3kAaI+WOR1xk9OB7d6T3D73QQNKtlRj6cfxq8G1FtUjMgct3A5j5P6oInk9j7f/Z" class="user-avatar">
+                                        <span class="username">Little Bunny</span>
+                                        <span class="timestamp">23/04/2025 17:04</span>
+                                    </div>
+                                    <div class="message-content">
+                                        Someone said they are going to fuck me up and they know my name is Dylan?
+                                    </div>
+                                </div>
+                                <div class="message user-message">
+                                    <div class="message-header">
+                                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAgACADASIAAhEBAxEB/8QAGgAAAgIDAAAAAAAAAAAAAAAABAUAAgEDBv/EACsQAAIBAwEGBQUBAAAAAAAAAAECAwAEERIFEyExQVEUIjJhcUKBocHw8f/EABUBAQEAAAAAAAAAAAAAAAAAAAIB/8QAGREBAQADAQAAAAAAAAAAAAAAAQACESEx/9oADAMBAAIRAxEAPwDmb23ltZzHKhU9Dj1DvWuJ2RwR+aKvppL6dZCjkKuj08sf7Utoj4iIMwCswBJ6CoyDcxsLuWRCpOW4Bc0Bs6ZBKxuZWCc++TTe1tLe3adgN9IjAgZ5j2+RS/a2zYYNFzbtu7eXOFOToI6E+/GjjLLlm4PhHljK4YNwUnP34UEjF9K9RRF1EYnG8YMeuDnFXtEgDl3JIHId6T2JyZ2UJKqzSZ1DzNqxoAHD+74ou2ggubWW3kAaI+WOR1xk9OB7d6T3D73QQNKtlRj6cfxq8G1FtUjMgct3A5j5P6oInk9j7f/Z" class="user-avatar">
+                                        <span class="username">Death</span>
+                                        <span class="timestamp">23/04/2025 17:04</span>
+                                    </div>
+                                    <div class="message-content">
+                                        Other than that, I've been a gangster, a dealer, a pure horrible person, I'm good at it, but that's not the same as being good, my kids are the only good thing I'll ever leave this world, and you know deep down, its what we are even here to do
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -706,7 +772,7 @@
                 const isPaidMember = checkUserMembership();
                 
                 if (isPaidMember) {
-                    addMessage('You', message, 'user');
+                    addMessage('You', message, 'user-message');
                     textarea.value = '';
                     
                     // Simulate AI response for paid members
@@ -718,7 +784,7 @@
                             '💀 *whispers in digital* The void responds to your query... 🧠⚰️'
                         ];
                         const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                        addMessage('DethBot AI v6', randomResponse, 'ai');
+                        addMessage('DethBot AI v6', randomResponse, 'user-message');
                     }, 1000);
                 } else {
                     // Show premium feature message
@@ -739,10 +805,22 @@
             messageDiv.className = `message ${type}`;
             
             const timestamp = new Date().toLocaleTimeString();
-            messageDiv.innerHTML = `
-                <span class="timestamp">${timestamp}</span>
-                <strong>${user}:</strong> ${message}
-            `;
+            
+            if (type === 'user-message') {
+                messageDiv.innerHTML = `
+                    <div class="message-header">
+                        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAgACADASIAAhEBAxEB/8QAGgAAAgIDAAAAAAAAAAAAAAAABAUAAgEDBv/EACsQAAIBAwEGBQUBAAAAAAAAAAECAwAEERIFEyExQVEUIjJhcUKBocHw8f/EABUBAQEAAAAAAAAAAAAAAAAAAAIB/8QAGREBAQADAQAAAAAAAAAAAAAAAQACESEx/9oADAMBAAIRAxEAPwDmb23ltZzHKhU9Dj1DvWuJ2RwR+aKvppL6dZCjkKuj08sf7Utoj4iIMwCswBJ6CoyDcxsLuWRCpOW4Bc0Bs6ZBKxuZWCc++TTe1tLe3adgN9IjAgZ5j2+RS/a2zYYNFzbtu7eXOFOToI6E+/GjjLLlm4PhHljK4YNwUnP34UEjF9K9RRF1EYnG8YMeuDnFXtEgDl3JIHId6T2JyZ2UJKqzSZ1DzNqxoAHD+74ou2ggubWW3kAaI+WOR1xk9OB7d6T3D73QQNKtlRj6cfxq8G1FtUjMgct3A5j5P6oInk9j7f/Z" class="user-avatar">
+                        <span class="username">${user}</span>
+                        <span class="timestamp">${timestamp}</span>
+                    </div>
+                    <div class="message-content">${message}</div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <span class="timestamp">${timestamp}</span>
+                    <strong>${user}:</strong> ${message}
+                `;
+            }
             
             chatContent.appendChild(messageDiv);
             chatContent.scrollTop = chatContent.scrollHeight;
@@ -765,24 +843,121 @@
                     }
                 });
             }
+            addMessage('System', 'YouTube player loaded', 'system');
         });
         
         // Close YouTube
         document.getElementById('youtube-close-embed').addEventListener('click', function() {
             document.querySelector('.js-video.youtube').classList.add('hidden');
+            addMessage('System', 'YouTube player closed', 'system');
         });
         
         // Media controls
         document.getElementById('media-broadcast').addEventListener('click', function() {
             this.classList.add('hidden');
             document.getElementById('media-stop').classList.remove('hidden');
-            addMessage('System', 'Broadcast started', 'system');
+            addMessage('System', 'Broadcast started - Premium feature requires DeathAIAUS Pro!', 'system');
         });
         
         document.getElementById('media-stop').addEventListener('click', function() {
             this.classList.add('hidden');
             document.getElementById('media-broadcast').classList.remove('hidden');
             addMessage('System', 'Broadcast stopped', 'system');
+        });
+        
+        // Games button
+        document.getElementById('games').addEventListener('click', function() {
+            addMessage('System', 'Games feature - Visit /shop to purchase game bots!', 'system');
+        });
+        
+        // Media button
+        document.getElementById('media').addEventListener('click', function() {
+            addMessage('System', 'Media controls - YouTube, Twitch, SoundCloud available!', 'system');
+        });
+        
+        // Room settings
+        document.getElementById('room-settings').addEventListener('click', function() {
+            addMessage('System', 'Room settings - Premium feature requires DeathAIAUS Pro!', 'system');
+        });
+        
+        // Theme settings
+        document.getElementById('theme-settings').addEventListener('click', function() {
+            addMessage('System', 'Theme settings - Premium feature requires DeathAIAUS Pro!', 'system');
+        });
+        
+        // Client settings
+        document.getElementById('client-settings').addEventListener('click', function() {
+            addMessage('System', 'Client settings - Premium feature requires DeathAIAUS Pro!', 'system');
+        });
+        
+        // Ban list
+        document.getElementById('banlist').addEventListener('click', function() {
+            addMessage('System', 'Ban list - Premium feature requires DeathAIAUS Pro!', 'system');
+        });
+        
+        // Screen share
+        document.getElementById('media-screen').addEventListener('click', function() {
+            addMessage('System', 'Screen share - Premium feature requires DeathAIAUS Pro!', 'system');
+        });
+        
+        // Media settings
+        document.getElementById('media-settings').addEventListener('click', function() {
+            addMessage('System', 'Media settings - Premium feature requires DeathAIAUS Pro!', 'system');
+        });
+        
+        // PTT (Push to Talk)
+        document.getElementById('media-ptt').addEventListener('click', function() {
+            addMessage('System', 'Push to Talk - Premium feature requires DeathAIAUS Pro!', 'system');
+        });
+        
+        // Open mic
+        document.getElementById('media-openmic').addEventListener('change', function() {
+            if (this.checked) {
+                addMessage('System', 'Open mic enabled - Premium feature requires DeathAIAUS Pro!', 'system');
+            } else {
+                addMessage('System', 'Open mic disabled', 'system');
+            }
+        });
+        
+        // Dropdown menu functionality
+        document.addEventListener('click', function(e) {
+            // Close dropdowns when clicking outside
+            if (!e.target.closest('.user-options-dropdown')) {
+                document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                    dropdown.style.display = 'none';
+                });
+            }
+        });
+        
+        // Show dropdown on button click
+        document.querySelectorAll('.dropbtn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const dropdown = this.nextElementSibling;
+                if (dropdown) {
+                    // Hide all other dropdowns
+                    document.querySelectorAll('.dropdown-content').forEach(d => {
+                        if (d !== dropdown) d.style.display = 'none';
+                    });
+                    // Toggle current dropdown
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                }
+            });
+        });
+        
+        // User list interactions
+        document.querySelectorAll('.bar').forEach(userBar => {
+            userBar.addEventListener('click', function() {
+                const username = this.querySelector('.nickname').textContent;
+                addMessage('System', `Clicked on ${username} - Premium user interaction requires DeathAIAUS Pro!`, 'system');
+            });
+        });
+        
+        // Volume controls
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', function() {
+                addMessage('System', `Volume set to ${this.value}% - Premium audio control requires DeathAIAUS Pro!`, 'system');
+            });
         });
         
         // Load YouTube API
