@@ -434,6 +434,35 @@
             line-height: 1.4;
         }
         
+        /* Video elements */
+        .local-video, .remote-video {
+            width: 200px;
+            height: 150px;
+            border-radius: 10px;
+            border: 2px solid #ff4444;
+            margin: 10px;
+            object-fit: cover;
+        }
+        
+        .local-video {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .remote-video {
+            display: inline-block;
+        }
+        
+        .online-indicator {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
+        
         .unreadmessage {
             background: #ff4444;
             color: #fff;
@@ -753,7 +782,18 @@
         </div>
     </div>
 
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script>
+        // Global variables for real-time functionality
+        let socket;
+        let currentRoom = 'marketing'; // Default room
+        let currentUser = 'Guest';
+        let isConnected = false;
+        let localStream = null;
+        let peerConnections = {};
+        let localVideo = null;
+        let remoteVideos = {};
+        
         // Basic chat functionality
         const textarea = document.getElementById('textarea');
         const chatContent = document.getElementById('chat-content');
@@ -765,32 +805,81 @@
             }
         });
         
+        // Initialize WebSocket connection
+        function initializeSocket() {
+            socket = io();
+            
+            socket.on('connect', () => {
+                console.log('Connected to DeathAIAUS server');
+                isConnected = true;
+                addMessage('System', 'Connected to DeathAIAUS! 💀', 'system');
+                
+                // Join the current room
+                socket.emit('join-room', {
+                    room: currentRoom,
+                    user: currentUser
+                });
+            });
+            
+            socket.on('disconnect', () => {
+                console.log('Disconnected from server');
+                isConnected = false;
+                addMessage('System', 'Disconnected from DeathAIAUS server', 'system');
+            });
+            
+            socket.on('user-joined', (data) => {
+                addMessage('System', `${data.user} joined the room`, 'system');
+                updateUserList(data.users);
+            });
+            
+            socket.on('user-left', (data) => {
+                addMessage('System', `${data.user} left the room`, 'system');
+                updateUserList(data.users);
+            });
+            
+            socket.on('chat-message', (data) => {
+                addMessage(data.user, data.message, 'user-message');
+            });
+            
+            socket.on('ai-response', (data) => {
+                addMessage('DethBot AI v6', data.message, 'user-message');
+            });
+            
+            socket.on('room-users', (data) => {
+                updateUserList(data.users);
+            });
+        }
+        
         function sendMessage() {
             const message = textarea.value.trim();
-            if (message) {
+            if (message && isConnected) {
                 // Check if user is a paid member
                 const isPaidMember = checkUserMembership();
                 
                 if (isPaidMember) {
+                    // Send message via WebSocket
+                    socket.emit('chat-message', {
+                        room: currentRoom,
+                        user: currentUser,
+                        message: message
+                    });
+                    
                     addMessage('You', message, 'user-message');
                     textarea.value = '';
                     
-                    // Simulate AI response for paid members
-                    setTimeout(() => {
-                        const responses = [
-                            '💀 The digital consciousness processes your message... 🧠',
-                            '⚰️ *shadows dance in the code* Interesting input... ✨',
-                            '🌙 *the AI consciousness stirs* Processing your request... 🔥',
-                            '💀 *whispers in digital* The void responds to your query... 🧠⚰️'
-                        ];
-                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                        addMessage('DethBot AI v6', randomResponse, 'user-message');
-                    }, 1000);
+                    // Request AI response for paid members
+                    socket.emit('ai-request', {
+                        room: currentRoom,
+                        user: currentUser,
+                        message: message
+                    });
                 } else {
                     // Show premium feature message
                     addMessage('System', '💀 AI Chat is a premium feature! Upgrade to DeathAIAUS Pro to chat with AI bots. Visit /shop to subscribe! 🔥', 'system');
                     textarea.value = '';
                 }
+            } else if (!isConnected) {
+                addMessage('System', 'Not connected to server. Please refresh the page.', 'system');
             }
         }
         
@@ -798,6 +887,160 @@
             // This would check against your user database
             // For demo purposes, return false (not a paid member)
             return false;
+        }
+        
+        function updateUserList(users) {
+            const userList = document.querySelector('.list');
+            userList.innerHTML = '';
+            
+            users.forEach(user => {
+                const userItem = document.createElement('li');
+                userItem.className = 'bar';
+                userItem.innerHTML = `
+                    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAgACADASIAAhEBAxEB/8QAGgAAAgIDAAAAAAAAAAAAAAAABAUAAgEDBv/EACsQAAIBAwEGBQUBAAAAAAAAAAECAwAEERIFEyExQVEUIjJhcUKBocHw8f/EABUBAQEAAAAAAAAAAAAAAAAAAAIB/8QAGREBAQADAQAAAAAAAAAAAAAAAQACESEx/9oADAMBAAIRAxEAPwDmb23ltZzHKhU9Dj1DvWuJ2RwR+aKvppL6dZCjkKuj08sf7Utoj4iIMwCswBJ6CoyDcxsLuWRCpOW4Bc0Bs6ZBKxuZWCc++TTe1tLe3adgN9IjAgZ5j2+RS/a2zYYNFzbtu7eXOFOToI6E+/GjjLLlm4PhHljK4YNwUnP34UEjF9K9RRF1EYnG8YMeuDnFXtEgDl3JIHId6T2JyZ2UJKqzSZ1DzNqxoAHD+74ou2ggubWW3kAaI+WOR1xk9OB7d6T3D73QQNKtlRj6cfxq8G1FtUjMgct3A5j5P6oInk9j7f/Z" class="bar-item">
+                    <div class="bar-item">
+                        <span class="nickname">${user.name}</span>
+                        <span class="username">${user.id}</span>
+                    </div>
+                    <div class="user-status">
+                        <div class="role ${user.role || 'user'}">${user.role || 'User'}</div>
+                        <div class="status">
+                            <div class="online-indicator"></div>
+                        </div>
+                    </div>
+                `;
+                userList.appendChild(userItem);
+            });
+        }
+        
+        // WebRTC Camera Functionality
+        async function initializeCamera() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                });
+                
+                // Create local video element
+                localVideo = document.createElement('video');
+                localVideo.srcObject = localStream;
+                localVideo.autoplay = true;
+                localVideo.muted = true;
+                localVideo.className = 'local-video';
+                
+                // Add to video container
+                const videoContainer = document.getElementById('videos');
+                videoContainer.appendChild(localVideo);
+                
+                addMessage('System', 'Camera initialized successfully! 📹', 'system');
+                
+                // Start WebRTC signaling
+                startWebRTCSignaling();
+                
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                addMessage('System', 'Camera access denied. Please allow camera permissions. 📹❌', 'system');
+            }
+        }
+        
+        function startWebRTCSignaling() {
+            socket.on('webrtc-offer', async (data) => {
+                const peerConnection = new RTCPeerConnection({
+                    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+                });
+                
+                peerConnections[data.from] = peerConnection;
+                
+                // Add local stream to peer connection
+                localStream.getTracks().forEach(track => {
+                    peerConnection.addTrack(track, localStream);
+                });
+                
+                // Handle remote stream
+                peerConnection.ontrack = (event) => {
+                    const remoteVideo = document.createElement('video');
+                    remoteVideo.srcObject = event.streams[0];
+                    remoteVideo.autoplay = true;
+                    remoteVideo.className = 'remote-video';
+                    remoteVideo.id = `remote-${data.from}`;
+                    
+                    document.getElementById('videos').appendChild(remoteVideo);
+                    remoteVideos[data.from] = remoteVideo;
+                };
+                
+                // Set remote description and create answer
+                await peerConnection.setRemoteDescription(data.offer);
+                const answer = await peerConnection.createAnswer();
+                await peerConnection.setLocalDescription(answer);
+                
+                socket.emit('webrtc-answer', {
+                    to: data.from,
+                    answer: answer
+                });
+            });
+            
+            socket.on('webrtc-answer', async (data) => {
+                const peerConnection = peerConnections[data.from];
+                if (peerConnection) {
+                    await peerConnection.setRemoteDescription(data.answer);
+                }
+            });
+            
+            socket.on('webrtc-ice-candidate', async (data) => {
+                const peerConnection = peerConnections[data.from];
+                if (peerConnection) {
+                    await peerConnection.addIceCandidate(data.candidate);
+                }
+            });
+            
+            socket.on('user-camera-on', (data) => {
+                addMessage('System', `${data.user} turned on their camera 📹`, 'system');
+            });
+            
+            socket.on('user-camera-off', (data) => {
+                addMessage('System', `${data.user} turned off their camera 📹❌`, 'system');
+                const remoteVideo = document.getElementById(`remote-${data.user}`);
+                if (remoteVideo) {
+                    remoteVideo.remove();
+                    delete remoteVideos[data.user];
+                }
+            });
+        }
+        
+        async function startBroadcast() {
+            if (!localStream) {
+                await initializeCamera();
+            }
+            
+            // Notify other users that camera is on
+            socket.emit('camera-status', {
+                room: currentRoom,
+                user: currentUser,
+                status: 'on'
+            });
+            
+            addMessage('System', 'Broadcast started! 📹', 'system');
+        }
+        
+        function stopBroadcast() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+                
+                if (localVideo) {
+                    localVideo.remove();
+                    localVideo = null;
+                }
+            }
+            
+            // Notify other users that camera is off
+            socket.emit('camera-status', {
+                room: currentRoom,
+                user: currentUser,
+                status: 'off'
+            });
+            
+            addMessage('System', 'Broadcast stopped 📹❌', 'system');
         }
         
         function addMessage(user, message, type) {
@@ -856,13 +1099,13 @@
         document.getElementById('media-broadcast').addEventListener('click', function() {
             this.classList.add('hidden');
             document.getElementById('media-stop').classList.remove('hidden');
-            addMessage('System', 'Broadcast started - Premium feature requires DeathAIAUS Pro!', 'system');
+            startBroadcast();
         });
         
         document.getElementById('media-stop').addEventListener('click', function() {
             this.classList.add('hidden');
             document.getElementById('media-broadcast').classList.remove('hidden');
-            addMessage('System', 'Broadcast stopped', 'system');
+            stopBroadcast();
         });
         
         // Games button
@@ -958,6 +1201,23 @@
             slider.addEventListener('input', function() {
                 addMessage('System', `Volume set to ${this.value}% - Premium audio control requires DeathAIAUS Pro!`, 'system');
             });
+        });
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSocket();
+            
+            // Set current user (in real app, this would come from login)
+            currentUser = prompt('Enter your username:') || 'Guest';
+            
+            // Set current room from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const roomParam = urlParams.get('room');
+            if (roomParam) {
+                currentRoom = roomParam;
+            }
+            
+            addMessage('System', `Welcome to ${currentRoom} room, ${currentUser}! 💀`, 'system');
         });
         
         // Load YouTube API
