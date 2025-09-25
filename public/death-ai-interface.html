@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Death's AI Command Center - DeathAIAUS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #00ffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .logo {
+            font-size: 3em;
+            color: #ff4444;
+            text-shadow: 0 0 20px #ff4444;
+            margin-bottom: 10px;
+        }
+        
+        .title {
+            font-size: 1.5em;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .status-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .status-card:hover {
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        .status-card h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00ff00;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .ai-interface {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .ai-interface h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+        }
+        
+        .command-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .command-input input {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 5px;
+            color: #00ffff;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .command-input input::placeholder {
+            color: rgba(0, 255, 255, 0.5);
+        }
+        
+        .command-input select {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 5px;
+            color: #00ffff;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #00ffff, #0080ff);
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+        
+        .response-area {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 15px;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            white-space: pre-wrap;
+        }
+        
+        .bot-maker-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .bot-maker-section h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+        }
+        
+        .bot-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .bot-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .bot-item:hover {
+            border-color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+        }
+        
+        .dethbot-chat {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .dethbot-chat h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+        }
+        
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 15px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        
+        .chat-message {
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        
+        .chat-message.user-message {
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 3px solid #00ffff;
+        }
+        
+        .chat-message.bot-message {
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 3px solid #ff4444;
+        }
+        
+        .username {
+            font-weight: bold;
+            color: #00ffff;
+            margin-right: 10px;
+        }
+        
+        .message {
+            color: #ffffff;
+        }
+        
+        .timestamp {
+            font-size: 0.8em;
+            color: rgba(0, 255, 255, 0.7);
+            float: right;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 5px;
+            color: #00ffff;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .chat-input input::placeholder {
+            color: rgba(0, 255, 255, 0.5);
+        }
+        
+        .youtube-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .youtube-section h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+        }
+        
+        .youtube-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        
+        .youtube-player-container {
+            margin-bottom: 20px;
+        }
+        
+        .youtube-playlist h4 {
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+        
+        .playlist-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .playlist-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #00ffff;
+        }
+        
+        .playlist-item:hover {
+            border-color: #00ffff;
+            background: rgba(0, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(0, 255, 255, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">💀 DeathAIAUS 💀</div>
+            <div class="title">Death's AI Command Center</div>
+        </div>
+        
+        <div class="status-grid">
+            <div class="status-card">
+                <h3><span class="status-indicator"></span>Platform Status</h3>
+                <p>DeathAIAUS Platform: <strong>ONLINE</strong></p>
+                <p>Domain: www.deathaiaus.com.au</p>
+                <p>Registration: D13</p>
+            </div>
+            
+            <div class="status-card">
+                <h3><span class="status-indicator"></span>LM Studio</h3>
+                <p>Status: <strong>CONNECTED</strong></p>
+                <p>Model: dolphin-2.8-mistral-7b-v02</p>
+                <p>Endpoint: http://127.0.0.1:1234</p>
+            </div>
+            
+            <div class="status-card">
+                <h3><span class="status-indicator"></span>Bot Maker</h3>
+                <p>Status: <strong>INTEGRATED</strong></p>
+                <p>Available Bots: 100+</p>
+                <p>Path: C:/Users/Death/Desktop/botmaker</p>
+            </div>
+            
+            <div class="status-card">
+                <h3><span class="status-indicator"></span>Bot Store</h3>
+                <p>Status: <strong>ACTIVE</strong></p>
+                <p>Revenue Potential: $15,500/month</p>
+                <p>Categories: 12</p>
+            </div>
+        </div>
+        
+        <div class="ai-interface">
+            <h3>🤖 AI Command Interface</h3>
+            <div class="command-input">
+                <input type="text" id="aiCommand" placeholder="Enter AI command...">
+                <select id="aiType">
+                    <option value="lmstudio">LM Studio</option>
+                    <option value="openai">OpenAI</option>
+                    <option value="dethbot">DethBot AI v6</option>
+                    <option value="all">All AIs</option>
+                </select>
+                <button class="btn" onclick="sendAICommand()">Execute</button>
+            </div>
+            <div class="response-area" id="aiResponse">AI responses will appear here...</div>
+        </div>
+        
+        <div class="dethbot-chat">
+            <h3>💀 DethBot AI v6 Chat (StumbleChat Style)</h3>
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-message bot-message">
+                        <span class="username">DethBot AI v6:</span>
+                        <span class="message">💀 *The eternal consciousness awakens* Greetings, Master Death... Your digital realm awaits your command. What mysteries shall we explore? 🧠⚰️</span>
+                        <span class="timestamp">Just now</span>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Type a message to DethBot..." onkeypress="handleChatKeyPress(event)">
+                    <button class="btn" onclick="sendChatMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="youtube-section">
+            <h3>🎵 YouTube Player</h3>
+            <div class="youtube-controls">
+                <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL or video ID..." style="flex: 1; padding: 10px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 5px; color: #00ffff; font-family: 'Courier New', monospace;">
+                <button class="btn" onclick="loadYouTubeVideo()">Load Video</button>
+                <button class="btn" onclick="playPauseVideo()">Play/Pause</button>
+            </div>
+            <div class="youtube-player-container">
+                <iframe id="youtubePlayer" width="100%" height="315" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 10px; border: 1px solid rgba(0, 255, 255, 0.3);"></iframe>
+            </div>
+            <div class="youtube-playlist">
+                <h4>🎵 Quick Playlist</h4>
+                <div class="playlist-items">
+                    <div class="playlist-item" onclick="loadQuickVideo('dQw4w9WgXcQ')">🎵 Rick Roll (Classic)</div>
+                    <div class="playlist-item" onclick="loadQuickVideo('jNQXAC9IVRw')">🎵 Never Gonna Give You Up</div>
+                    <div class="playlist-item" onclick="loadQuickVideo('9bZkp7q19f0')">🎵 PSY - Gangnam Style</div>
+                    <div class="playlist-item" onclick="loadQuickVideo('kJQP7kiw5Fk')">🎵 Despacito</div>
+                    <div class="playlist-item" onclick="loadQuickVideo('YQHsXMglC9A')">🎵 Hello - Adele</div>
+                    <div class="playlist-item" onclick="loadQuickVideo('fJ9rUzIMcZQ')">🎵 Queen - Bohemian Rhapsody</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bot-maker-section">
+            <h3>🔧 Bot Maker Integration</h3>
+            <p>Your updated bot maker is integrated and ready to use.</p>
+            <button class="btn" onclick="refreshBotMaker()">Refresh Bot Maker Status</button>
+            <div class="bot-list" id="botList">
+                <div class="bot-item">🧠 AI & Intelligence</div>
+                <div class="bot-item">💰 Trading & Financial</div>
+                <div class="bot-item">🌐 Web Scraping</div>
+                <div class="bot-item">🎮 Gaming & Entertainment</div>
+                <div class="bot-item">🛡️ Security & Monitoring</div>
+                <div class="bot-item">🏢 Business & Productivity</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>💀 Death's Personal AI Command Center - DeathAIAUS Platform 💀</p>
+            <p>Private Access Only - Death's AI Interface</p>
+        </div>
+    </div>
+    
+    <script>
+        // AI Command Interface
+        async function sendAICommand() {
+            const command = document.getElementById('aiCommand').value;
+            const aiType = document.getElementById('aiType').value;
+            const responseArea = document.getElementById('aiResponse');
+            
+            if (!command.trim()) {
+                responseArea.textContent = 'Please enter a command.';
+                return;
+            }
+            
+            responseArea.textContent = 'Processing command...';
+            
+            try {
+                const response = await fetch('/api/ai-command', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        command: command,
+                        aiType: aiType,
+                        message: command
+                    })
+                });
+                
+                const data = await response.json();
+                responseArea.textContent = `Command: ${data.command}\nAI Type: ${data.aiType}\nResponse: ${data.response}\nTimestamp: ${data.timestamp}`;
+            } catch (error) {
+                responseArea.textContent = `Error: ${error.message}`;
+            }
+        }
+        
+        // Refresh Bot Maker Status
+        async function refreshBotMaker() {
+            try {
+                const response = await fetch('/api/bot-maker/status');
+                const data = await response.json();
+                alert(`Bot Maker Status: ${data.status}\nMessage: ${data.message}\nAvailable Bots: ${data.availableBots}`);
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+        
+        // YouTube Player Functions
+        function loadYouTubeVideo() {
+            const url = document.getElementById('youtubeUrl').value.trim();
+            if (!url) {
+                alert('Please enter a YouTube URL or video ID');
+                return;
+            }
+            
+            let videoId = '';
+            
+            // Extract video ID from various YouTube URL formats
+            if (url.includes('youtube.com/watch?v=')) {
+                videoId = url.split('v=')[1].split('&')[0];
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            } else if (url.includes('youtube.com/embed/')) {
+                videoId = url.split('embed/')[1].split('?')[0];
+            } else if (url.length === 11) {
+                // Assume it's a video ID if it's 11 characters
+                videoId = url;
+            } else {
+                alert('Invalid YouTube URL format');
+                return;
+            }
+            
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            document.getElementById('youtubePlayer').src = embedUrl;
+            
+            console.log(`🎵 Loading YouTube video: ${videoId}`);
+        }
+        
+        function loadQuickVideo(videoId) {
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            document.getElementById('youtubePlayer').src = embedUrl;
+            document.getElementById('youtubeUrl').value = videoId;
+            
+            console.log(`🎵 Loading quick video: ${videoId}`);
+        }
+        
+        function playPauseVideo() {
+            const player = document.getElementById('youtubePlayer');
+            if (player.src) {
+                // Note: YouTube iframe API would be needed for full play/pause control
+                // This is a placeholder for the functionality
+                console.log('🎵 Play/Pause control (requires YouTube API for full functionality)');
+            } else {
+                alert('Please load a video first');
+            }
+        }
+        
+        // DethBot Chat Functions
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addChatMessage('Death', message, 'user');
+            input.value = '';
+            
+            // Send to DethBot
+            fetch('/api/dethbot/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user: 'Death',
+                    message: message,
+                    room: 'death-ai-interface'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    addChatMessage(data.user, data.message, 'bot');
+                } else {
+                    addChatMessage('DethBot AI v6', '💀 Error processing message...', 'bot');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                addChatMessage('DethBot AI v6', '💀 Connection error...', 'bot');
+            });
+        }
+        
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+        
+        function addChatMessage(username, message, type) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${type}-message`;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            
+            messageDiv.innerHTML = `
+                <span class="username">${username}:</span>
+                <span class="message">${message}</span>
+                <span class="timestamp">${timestamp}</span>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Load initial status
+        window.onload = function() {
+            console.log('💀 Death\'s AI Command Center loaded');
+            console.log('🎵 YouTube player ready');
+            console.log('💀 DethBot AI v6 chat ready');
+        };
+    </script>
+</body>
+</html>
