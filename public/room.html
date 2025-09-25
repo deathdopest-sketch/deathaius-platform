@@ -1069,156 +1069,212 @@
             chatContent.scrollTop = chatContent.scrollHeight;
         }
         
-        // YouTube integration
-        document.getElementById('youtube').addEventListener('click', function() {
-            const youtubeVideo = document.querySelector('.js-video.youtube');
-            youtubeVideo.classList.remove('hidden');
-            
-            // Load YouTube player
-            if (typeof YT !== 'undefined') {
-                new YT.Player('youtubeplayer', {
-                    height: '100%',
-                    width: '100%',
-                    videoId: 'dQw4w9WgXcQ', // Rick Roll as default
-                    playerVars: {
-                        'playsinline': 1,
-                        'autoplay': 1
-                    }
-                });
-            }
-            addMessage('System', 'YouTube player loaded', 'system');
-        });
-        
-        // Close YouTube
-        document.getElementById('youtube-close-embed').addEventListener('click', function() {
-            document.querySelector('.js-video.youtube').classList.add('hidden');
-            addMessage('System', 'YouTube player closed', 'system');
-        });
-        
-        // Media controls
-        document.getElementById('media-broadcast').addEventListener('click', function() {
-            this.classList.add('hidden');
-            document.getElementById('media-stop').classList.remove('hidden');
-            startBroadcast();
-        });
-        
-        document.getElementById('media-stop').addEventListener('click', function() {
-            this.classList.add('hidden');
-            document.getElementById('media-broadcast').classList.remove('hidden');
-            stopBroadcast();
-        });
-        
-        // Games button
-        document.getElementById('games').addEventListener('click', function() {
-            addMessage('System', 'Games feature - Visit /shop to purchase game bots!', 'system');
-        });
-        
-        // Media button
-        document.getElementById('media').addEventListener('click', function() {
-            addMessage('System', 'Media controls - YouTube, Twitch, SoundCloud available!', 'system');
-        });
-        
-        // Room settings
-        document.getElementById('room-settings').addEventListener('click', function() {
-            addMessage('System', 'Room settings - Premium feature requires DeathAIAUS Pro!', 'system');
-        });
-        
-        // Theme settings
-        document.getElementById('theme-settings').addEventListener('click', function() {
-            addMessage('System', 'Theme settings - Premium feature requires DeathAIAUS Pro!', 'system');
-        });
-        
-        // Client settings
-        document.getElementById('client-settings').addEventListener('click', function() {
-            addMessage('System', 'Client settings - Premium feature requires DeathAIAUS Pro!', 'system');
-        });
-        
-        // Ban list
-        document.getElementById('banlist').addEventListener('click', function() {
-            addMessage('System', 'Ban list - Premium feature requires DeathAIAUS Pro!', 'system');
-        });
-        
-        // Screen share
-        document.getElementById('media-screen').addEventListener('click', function() {
-            addMessage('System', 'Screen share - Premium feature requires DeathAIAUS Pro!', 'system');
-        });
-        
-        // Media settings
-        document.getElementById('media-settings').addEventListener('click', function() {
-            addMessage('System', 'Media settings - Premium feature requires DeathAIAUS Pro!', 'system');
-        });
-        
-        // PTT (Push to Talk)
-        document.getElementById('media-ptt').addEventListener('click', function() {
-            addMessage('System', 'Push to Talk - Premium feature requires DeathAIAUS Pro!', 'system');
-        });
-        
-        // Open mic
-        document.getElementById('media-openmic').addEventListener('change', function() {
-            if (this.checked) {
-                addMessage('System', 'Open mic enabled - Premium feature requires DeathAIAUS Pro!', 'system');
-            } else {
-                addMessage('System', 'Open mic disabled', 'system');
-            }
-        });
-        
-        // Dropdown menu functionality
-        document.addEventListener('click', function(e) {
-            // Close dropdowns when clicking outside
-            if (!e.target.closest('.user-options-dropdown')) {
-                document.querySelectorAll('.dropdown-content').forEach(dropdown => {
-                    dropdown.style.display = 'none';
-                });
-            }
-        });
-        
-        // Show dropdown on button click
-        document.querySelectorAll('.dropbtn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const dropdown = this.nextElementSibling;
-                if (dropdown) {
-                    // Hide all other dropdowns
-                    document.querySelectorAll('.dropdown-content').forEach(d => {
-                        if (d !== dropdown) d.style.display = 'none';
-                    });
-                    // Toggle current dropdown
-                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-                }
-            });
-        });
-        
-        // User list interactions
-        document.querySelectorAll('.bar').forEach(userBar => {
-            userBar.addEventListener('click', function() {
-                const username = this.querySelector('.nickname').textContent;
-                addMessage('System', `Clicked on ${username} - Premium user interaction requires DeathAIAUS Pro!`, 'system');
-            });
-        });
-        
-        // Volume controls
-        document.querySelectorAll('input[type="range"]').forEach(slider => {
-            slider.addEventListener('input', function() {
-                addMessage('System', `Volume set to ${this.value}% - Premium audio control requires DeathAIAUS Pro!`, 'system');
-            });
-        });
         
         // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            initializeSocket();
-            
-            // Set current user (in real app, this would come from login)
-            currentUser = prompt('Enter your username:') || 'Guest';
-            
-            // Set current room from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const roomParam = urlParams.get('room');
-            if (roomParam) {
-                currentRoom = roomParam;
+            try {
+                initializeSocket();
+                
+                // Set current user (in real app, this would come from login)
+                currentUser = prompt('Enter your username:') || 'Guest';
+                
+                // Set current room from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const roomParam = urlParams.get('room');
+                if (roomParam) {
+                    currentRoom = roomParam;
+                }
+                
+                addMessage('System', `Welcome to ${currentRoom} room, ${currentUser}! 💀`, 'system');
+                
+                // Initialize all button event listeners
+                initializeButtonListeners();
+                
+            } catch (error) {
+                console.error('Error initializing DeathAIAUS:', error);
+                addMessage('System', 'Error initializing platform. Please refresh the page.', 'system');
             }
-            
-            addMessage('System', `Welcome to ${currentRoom} room, ${currentUser}! 💀`, 'system');
         });
+        
+        function initializeButtonListeners() {
+            try {
+                // YouTube integration
+                const youtubeBtn = document.getElementById('youtube');
+                if (youtubeBtn) {
+                    youtubeBtn.addEventListener('click', function() {
+                        const youtubeVideo = document.querySelector('.js-video.youtube');
+                        if (youtubeVideo) {
+                            youtubeVideo.classList.remove('hidden');
+                            addMessage('System', 'YouTube player loaded', 'system');
+                        }
+                    });
+                }
+                
+                // Close YouTube
+                const youtubeCloseBtn = document.getElementById('youtube-close-embed');
+                if (youtubeCloseBtn) {
+                    youtubeCloseBtn.addEventListener('click', function() {
+                        const youtubeVideo = document.querySelector('.js-video.youtube');
+                        if (youtubeVideo) {
+                            youtubeVideo.classList.add('hidden');
+                            addMessage('System', 'YouTube player closed', 'system');
+                        }
+                    });
+                }
+                
+                // Media controls
+                const broadcastBtn = document.getElementById('media-broadcast');
+                if (broadcastBtn) {
+                    broadcastBtn.addEventListener('click', function() {
+                        this.classList.add('hidden');
+                        const stopBtn = document.getElementById('media-stop');
+                        if (stopBtn) stopBtn.classList.remove('hidden');
+                        startBroadcast();
+                    });
+                }
+                
+                const stopBtn = document.getElementById('media-stop');
+                if (stopBtn) {
+                    stopBtn.addEventListener('click', function() {
+                        this.classList.add('hidden');
+                        const broadcastBtn = document.getElementById('media-broadcast');
+                        if (broadcastBtn) broadcastBtn.classList.remove('hidden');
+                        stopBroadcast();
+                    });
+                }
+                
+                // Games button
+                const gamesBtn = document.getElementById('games');
+                if (gamesBtn) {
+                    gamesBtn.addEventListener('click', function() {
+                        addMessage('System', 'Games feature - Visit /shop to purchase game bots!', 'system');
+                    });
+                }
+                
+                // Media button
+                const mediaBtn = document.getElementById('media');
+                if (mediaBtn) {
+                    mediaBtn.addEventListener('click', function() {
+                        addMessage('System', 'Media controls - YouTube, Twitch, SoundCloud available!', 'system');
+                    });
+                }
+                
+                // Settings buttons
+                const roomSettingsBtn = document.getElementById('room-settings');
+                if (roomSettingsBtn) {
+                    roomSettingsBtn.addEventListener('click', function() {
+                        addMessage('System', 'Room settings - Premium feature requires DeathAIAUS Pro!', 'system');
+                    });
+                }
+                
+                const themeSettingsBtn = document.getElementById('theme-settings');
+                if (themeSettingsBtn) {
+                    themeSettingsBtn.addEventListener('click', function() {
+                        addMessage('System', 'Theme settings - Premium feature requires DeathAIAUS Pro!', 'system');
+                    });
+                }
+                
+                const clientSettingsBtn = document.getElementById('client-settings');
+                if (clientSettingsBtn) {
+                    clientSettingsBtn.addEventListener('click', function() {
+                        addMessage('System', 'Client settings - Premium feature requires DeathAIAUS Pro!', 'system');
+                    });
+                }
+                
+                const banlistBtn = document.getElementById('banlist');
+                if (banlistBtn) {
+                    banlistBtn.addEventListener('click', function() {
+                        addMessage('System', 'Ban list - Premium feature requires DeathAIAUS Pro!', 'system');
+                    });
+                }
+                
+                // Screen share
+                const screenBtn = document.getElementById('media-screen');
+                if (screenBtn) {
+                    screenBtn.addEventListener('click', function() {
+                        addMessage('System', 'Screen share - Premium feature requires DeathAIAUS Pro!', 'system');
+                    });
+                }
+                
+                // Media settings
+                const mediaSettingsBtn = document.getElementById('media-settings');
+                if (mediaSettingsBtn) {
+                    mediaSettingsBtn.addEventListener('click', function() {
+                        addMessage('System', 'Media settings - Premium feature requires DeathAIAUS Pro!', 'system');
+                    });
+                }
+                
+                // PTT (Push to Talk)
+                const pttBtn = document.getElementById('media-ptt');
+                if (pttBtn) {
+                    pttBtn.addEventListener('click', function() {
+                        addMessage('System', 'Push to Talk - Premium feature requires DeathAIAUS Pro!', 'system');
+                    });
+                }
+                
+                // Open mic
+                const openMicCheckbox = document.getElementById('media-openmic');
+                if (openMicCheckbox) {
+                    const checkbox = openMicCheckbox.querySelector('input[type="checkbox"]');
+                    if (checkbox) {
+                        checkbox.addEventListener('change', function() {
+                            if (this.checked) {
+                                addMessage('System', 'Open mic enabled - Premium feature requires DeathAIAUS Pro!', 'system');
+                            } else {
+                                addMessage('System', 'Open mic disabled', 'system');
+                            }
+                        });
+                    }
+                }
+                
+                // Dropdown menu functionality
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.user-options-dropdown')) {
+                        document.querySelectorAll('.dropdown-content').forEach(dropdown => {
+                            dropdown.style.display = 'none';
+                        });
+                    }
+                });
+                
+                // Show dropdown on button click
+                document.querySelectorAll('.dropbtn').forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const dropdown = this.nextElementSibling;
+                        if (dropdown) {
+                            document.querySelectorAll('.dropdown-content').forEach(d => {
+                                if (d !== dropdown) d.style.display = 'none';
+                            });
+                            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                        }
+                    });
+                });
+                
+                // User list interactions
+                document.querySelectorAll('.bar').forEach(userBar => {
+                    userBar.addEventListener('click', function() {
+                        const nickname = this.querySelector('.nickname');
+                        if (nickname) {
+                            const username = nickname.textContent;
+                            addMessage('System', `Clicked on ${username} - Premium user interaction requires DeathAIAUS Pro!`, 'system');
+                        }
+                    });
+                });
+                
+                // Volume controls
+                document.querySelectorAll('input[type="range"]').forEach(slider => {
+                    slider.addEventListener('input', function() {
+                        addMessage('System', `Volume set to ${this.value}% - Premium audio control requires DeathAIAUS Pro!`, 'system');
+                    });
+                });
+                
+                console.log('All button listeners initialized successfully');
+                
+            } catch (error) {
+                console.error('Error initializing button listeners:', error);
+                addMessage('System', 'Some buttons may not work properly. Please refresh the page.', 'system');
+            }
+        }
         
         // Load YouTube API
         var tag = document.createElement('script');
