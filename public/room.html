@@ -807,47 +807,57 @@
         
         // Initialize WebSocket connection
         function initializeSocket() {
-            socket = io();
-            
-            socket.on('connect', () => {
-                console.log('Connected to DeathAIAUS server');
-                isConnected = true;
-                addMessage('System', 'Connected to DeathAIAUS! 💀', 'system');
+            try {
+                console.log('Initializing Socket.IO connection...');
+                socket = io();
                 
-                // Join the current room
-                socket.emit('join-room', {
-                    room: currentRoom,
-                    user: currentUser
+                socket.on('connect', () => {
+                    console.log('Connected to DeathAIAUS server');
+                    isConnected = true;
+                    addMessage('System', 'Connected to DeathAIAUS! 💀', 'system');
+                    
+                    // Join the current room
+                    socket.emit('join-room', {
+                        room: currentRoom,
+                        user: currentUser
+                    });
                 });
-            });
-            
-            socket.on('disconnect', () => {
-                console.log('Disconnected from server');
-                isConnected = false;
-                addMessage('System', 'Disconnected from DeathAIAUS server', 'system');
-            });
-            
-            socket.on('user-joined', (data) => {
-                addMessage('System', `${data.user} joined the room`, 'system');
-                updateUserList(data.users);
-            });
-            
-            socket.on('user-left', (data) => {
-                addMessage('System', `${data.user} left the room`, 'system');
-                updateUserList(data.users);
-            });
-            
-            socket.on('chat-message', (data) => {
-                addMessage(data.user, data.message, 'user-message');
-            });
-            
-            socket.on('ai-response', (data) => {
-                addMessage('DethBot AI v6', data.message, 'user-message');
-            });
-            
-            socket.on('room-users', (data) => {
-                updateUserList(data.users);
-            });
+                
+                socket.on('disconnect', () => {
+                    console.log('Disconnected from server');
+                    isConnected = false;
+                    addMessage('System', 'Disconnected from DeathAIAUS server', 'system');
+                });
+                
+                socket.on('user-joined', (data) => {
+                    addMessage('System', `${data.user} joined the room`, 'system');
+                    updateUserList(data.users);
+                });
+                
+                socket.on('user-left', (data) => {
+                    addMessage('System', `${data.user} left the room`, 'system');
+                    updateUserList(data.users);
+                });
+                
+                socket.on('chat-message', (data) => {
+                    addMessage(data.user, data.message, 'user-message');
+                });
+                
+                socket.on('ai-response', (data) => {
+                    addMessage('DethBot AI v6', data.message, 'user-message');
+                });
+                
+                socket.on('room-users', (data) => {
+                    updateUserList(data.users);
+                });
+                
+                console.log('Socket.IO event listeners registered');
+                
+            } catch (error) {
+                console.error('Error initializing Socket.IO:', error);
+                addMessage('System', 'Socket connection failed - buttons will still work locally', 'system');
+                // Continue with button initialization even if socket fails
+            }
         }
         
         function sendMessage() {
@@ -1090,9 +1100,22 @@
                 // Initialize all button event listeners
                 initializeButtonListeners();
                 
+                // Test button functionality
+                setTimeout(() => {
+                    testButtons();
+                }, 1000);
+                
             } catch (error) {
                 console.error('Error initializing DeathAIAUS:', error);
                 addMessage('System', 'Error initializing platform. Please refresh the page.', 'system');
+            }
+        });
+        
+        // Fallback for when Socket.IO fails to load
+        window.addEventListener('load', function() {
+            if (typeof io === 'undefined') {
+                console.warn('Socket.IO not loaded - using fallback mode');
+                addMessage('System', 'Socket.IO not available - buttons will work in local mode', 'system');
             }
         });
         
@@ -1270,10 +1293,33 @@
                 
                 console.log('All button listeners initialized successfully');
                 
+                // Test button functionality
+                addMessage('System', 'All buttons initialized and ready! Click any button to test.', 'system');
+                
             } catch (error) {
                 console.error('Error initializing button listeners:', error);
                 addMessage('System', 'Some buttons may not work properly. Please refresh the page.', 'system');
             }
+        }
+        
+        // Simple test function to verify buttons work
+        function testButtons() {
+            console.log('Testing button functionality...');
+            
+            // Test if elements exist
+            const testElements = [
+                'youtube', 'media-broadcast', 'games', 'media', 
+                'room-settings', 'theme-settings', 'client-settings'
+            ];
+            
+            testElements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    console.log(`✅ Button ${id} found`);
+                } else {
+                    console.log(`❌ Button ${id} NOT found`);
+                }
+            });
         }
         
         // Load YouTube API
